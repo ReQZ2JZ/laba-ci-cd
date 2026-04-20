@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  check:
+    name: Syntax and import check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - run: |
+          pip install --upgrade pip
+          pip install fastapi pydantic uvicorn
+
+      - run: python -m py_compile main.py
+      - run: python -c "import main; print('imported OK')"
